@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -45,13 +46,13 @@ export function Header() {
     >
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a
+        <Link
           href="/"
           aria-label="Markey Gallery Home"
           className="text-xl font-serif text-cream hover:text-gold transition-colors duration-300"
         >
           Markey Gallery
-        </a>
+        </Link>
 
         {/* Navigation */}
         <ul className="hidden md:flex items-center gap-8">
