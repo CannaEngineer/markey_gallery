@@ -4,10 +4,14 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { fadeUp, staggerContainer, staggerItem, scaleIn } from '@/lib/animations';
-import { galleryImages } from '@/lib/constants';
 import { Lightbox } from '@/components/ui/Lightbox';
+import { GalleryImage } from '@/lib/getGalleryImages';
 
-export function Space() {
+interface SpaceProps {
+  images: GalleryImage[];
+}
+
+export function Space({ images }: SpaceProps) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -22,7 +26,7 @@ export function Space() {
 
   const goToNext = () => {
     setCurrentImageIndex((prev) =>
-      prev < galleryImages.length - 1 ? prev + 1 : prev
+      prev < images.length - 1 ? prev + 1 : prev
     );
   };
 
@@ -31,7 +35,7 @@ export function Space() {
   };
 
   // First 5 images for the bento grid
-  const bentoImages = galleryImages.slice(0, 5);
+  const bentoImages = images.slice(0, 5);
 
   return (
     <section id="space" className="py-32 bg-stone-100">
@@ -168,7 +172,7 @@ export function Space() {
 
       {/* Lightbox */}
       <Lightbox
-        images={galleryImages}
+        images={images}
         currentIndex={currentImageIndex}
         isOpen={isLightboxOpen}
         onClose={closeLightbox}
