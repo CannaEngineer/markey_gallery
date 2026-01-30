@@ -49,6 +49,6 @@ export const venueDetails: VenueDetails = {
   capacity: 70,
   location: 'Hell\'s Kitchen, NYC',
   address: '358 W 40th St 2nd floor, New York, NY 10018',
-  priceRange: 'from $200',
+  priceRange: 'from $200/hour',
   byob: true,
 };
