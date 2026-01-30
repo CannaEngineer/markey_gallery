@@ -1,16 +1,53 @@
 'use client';
 
+import { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { useForm, ValidationError } from '@formspree/react';
 import { fadeUp, staggerContainer, staggerItem } from '@/lib/animations';
 import { eventTypes } from '@/lib/constants';
 
 export function Contact() {
-  const [state, handleSubmit] = useForm(
-    process.env.NEXT_PUBLIC_FORMSPREE_ID || 'placeholder'
-  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
 
-  if (state.succeeded) {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      eventType: formData.get('eventType'),
+      date: formData.get('date'),
+      guests: formData.get('guests'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setIsSuccess(true);
+    } catch (err) {
+      setError('Failed to send message. Please try again or email us directly.');
+      console.error('Form submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isSuccess) {
     return (
       <section id="contact" className="py-32 bg-stone-950">
         <div className="max-w-3xl mx-auto px-6 text-center">
@@ -27,7 +64,10 @@ export function Contact() {
               We've received your inquiry and will respond within 24 hours.
             </p>
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                setIsSuccess(false);
+                setError('');
+              }}
               className="inline-flex items-center justify-center px-8 py-4 text-sm font-sans tracking-widest uppercase border border-cream/30 text-cream hover:bg-cream/10 hover:border-cream/50 transition-all duration-300"
             >
               Send Another Inquiry
@@ -78,6 +118,13 @@ export function Contact() {
           variants={fadeUp}
         >
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Error Message */}
+            {error && (
+              <div className="p-4 bg-red-900/20 border border-red-900/50 rounded">
+                <p className="text-red-400 text-sm">{error}</p>
+              </div>
+            )}
+
             {/* Name */}
             <div>
               <label
@@ -92,9 +139,8 @@ export function Contact() {
                 name="name"
                 required
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={state.submitting}
+                disabled={isSubmitting}
               />
-              <ValidationError prefix="Name" field="name" errors={state.errors} />
             </div>
 
             {/* Email */}
@@ -111,9 +157,8 @@ export function Contact() {
                 name="email"
                 required
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={state.submitting}
+                disabled={isSubmitting}
               />
-              <ValidationError prefix="Email" field="email" errors={state.errors} />
             </div>
 
             {/* Event Type */}
@@ -129,7 +174,7 @@ export function Contact() {
                 name="eventType"
                 required
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={state.submitting}
+                disabled={isSubmitting}
               >
                 <option value="">Select an event type</option>
                 {eventTypes.map((event) => (
@@ -139,7 +184,6 @@ export function Contact() {
                 ))}
                 <option value="other">Other</option>
               </select>
-              <ValidationError prefix="Event Type" field="eventType" errors={state.errors} />
             </div>
 
             {/* Date */}
@@ -155,9 +199,8 @@ export function Contact() {
                 type="date"
                 name="date"
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={state.submitting}
+                disabled={isSubmitting}
               />
-              <ValidationError prefix="Date" field="date" errors={state.errors} />
             </div>
 
             {/* Guests */}
@@ -176,9 +219,8 @@ export function Contact() {
                 max="70"
                 placeholder="1-70"
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={state.submitting}
+                disabled={isSubmitting}
               />
-              <ValidationError prefix="Guests" field="guests" errors={state.errors} />
             </div>
 
             {/* Message */}
@@ -194,18 +236,17 @@ export function Contact() {
                 name="message"
                 rows={6}
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors resize-none"
-                disabled={state.submitting}
+                disabled={isSubmitting}
               />
-              <ValidationError prefix="Message" field="message" errors={state.errors} />
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={state.submitting}
+              disabled={isSubmitting}
               className="w-full px-8 py-4 text-sm font-sans tracking-widest uppercase bg-amber-600 text-stone-950 hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-600/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {state.submitting ? 'Sending...' : 'Send Inquiry'}
+              {isSubmitting ? 'Sending...' : 'Send Inquiry'}
             </button>
           </form>
         </motion.div>
