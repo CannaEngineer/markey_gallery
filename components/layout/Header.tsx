@@ -8,11 +8,19 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -38,7 +46,8 @@ export function Header() {
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <a
-          href="#"
+          href="/"
+          aria-label="Markey Gallery Home"
           className="text-xl font-serif text-cream hover:text-gold transition-colors duration-300"
         >
           Markey Gallery
@@ -61,6 +70,7 @@ export function Header() {
         {/* CTA Button */}
         <a
           href="#contact"
+          aria-label="Book your event now"
           className="hidden md:inline-flex px-6 py-3 bg-gold text-charcoal text-sm uppercase tracking-widest font-medium hover:bg-gold/90 hover:shadow-gold transition-all duration-300"
         >
           Book Now
