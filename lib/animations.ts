@@ -1,6 +1,17 @@
 import { Variants } from 'framer-motion';
 
 /**
+ * Animation variants for Framer Motion
+ *
+ * ACCESSIBILITY: Framer Motion automatically respects prefers-reduced-motion
+ * when using whileInView or AnimatePresence. No additional configuration needed.
+ *
+ * For manual control, components can use:
+ *   const prefersReducedMotion = useReducedMotion()
+ *   const variants = prefersReducedMotion ? { animate: { transition: { duration: 0.01 } } } : fadeUp
+ */
+
+/**
  * Standard fade up animation - most common
  * Duration: 800ms
  * Easing: Custom cubic bezier for smooth deceleration
