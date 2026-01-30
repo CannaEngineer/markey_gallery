@@ -47,6 +47,6 @@ export const eventTypes: EventType[] = [
 export const venueDetails: VenueDetails = {
   capacity: 70,
   location: 'Hell\'s Kitchen, NYC',
-  priceRange: '$200-400/hour',
+  priceRange: 'from $200',
   byob: true,
 };
