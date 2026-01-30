@@ -80,17 +80,67 @@ export function Details() {
           ))}
         </motion.div>
 
-        {/* Map Placeholder */}
+        {/* Map and Address */}
         <motion.div
-          className="bg-stone-300 rounded-lg h-96 flex items-center justify-center"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: "-100px" }}
-          variants={fadeUp}
+          variants={staggerContainer}
         >
-          <p className="text-stone-600 font-sans tracking-widest uppercase text-sm">
-            Map Placeholder
-          </p>
+          {/* Address Card */}
+          <motion.div
+            className="lg:col-span-1 bg-charcoal rounded-lg p-8 flex flex-col justify-center"
+            variants={staggerItem}
+          >
+            <p className="text-gold tracking-[0.3em] text-sm uppercase mb-4">
+              Visit Us
+            </p>
+            <h3 className="font-serif text-3xl text-cream mb-6">
+              Markey Gallery
+            </h3>
+            <address className="text-stone-400 not-italic mb-6 leading-relaxed">
+              {venueDetails.address}
+            </address>
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venueDetails.address)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-gold hover:text-cream transition-colors text-sm uppercase tracking-wider"
+            >
+              Get Directions
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </a>
+          </motion.div>
+
+          {/* Google Maps Embed */}
+          <motion.div
+            className="lg:col-span-2 rounded-lg overflow-hidden h-96 lg:h-auto"
+            variants={staggerItem}
+          >
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(venueDetails.address)}&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: '400px' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Markey Gallery Location"
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>
