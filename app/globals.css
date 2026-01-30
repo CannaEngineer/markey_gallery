@@ -7,6 +7,19 @@
   --color-terracotta: #c4704f;
   --color-gold: #d4af37;
 
+  /* Stone Scale */
+  --color-stone-50: #fafaf9;
+  --color-stone-100: #f5f5f4;
+  --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1;
+  --color-stone-400: #a8a29e;
+  --color-stone-500: #78716c;
+  --color-stone-600: #57534e;
+  --color-stone-700: #44403c;
+  --color-stone-800: #292524;
+  --color-stone-900: #1c1917;
+  --color-stone-950: #0c0a09;
+
   /* Background Colors */
   --color-background-dark: #0c0a09;
   --color-background-light: #f5f5f4;
@@ -20,6 +33,7 @@
   /* Border Colors */
   --color-border-subtle: #292524;
   --color-border-default: #44403c;
+  --color-border-accent: rgba(196, 112, 79, 0.5);
 
   /* Font Families */
   --font-family-serif: var(--font-cormorant), Georgia, serif;
