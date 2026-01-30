@@ -21,11 +21,6 @@ export function Details() {
       value: venueDetails.priceRange,
       description: 'Flexible packages available',
     },
-    {
-      label: 'BYOB',
-      value: venueDetails.byob ? 'Allowed' : 'Not Allowed',
-      description: 'For private events',
-    },
   ];
 
   return (
@@ -55,7 +50,7 @@ export function Details() {
 
         {/* Stats Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: "-100px" }}
