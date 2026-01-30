@@ -2,12 +2,12 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-charcoal border-t border-border-subtle">
+    <footer className="bg-background-dark border-t border-border-subtle">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo & Description */}
           <div>
-            <h3 className="text-xl font-serif text-cream mb-3">
+            <h3 className="text-xl font-serif text-text-primary mb-3">
               Markey Gallery
             </h3>
             <p className="text-sm text-text-secondary leading-relaxed">
