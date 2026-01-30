@@ -1,4 +1,19 @@
-export const eventTypes = [
+export interface EventType {
+  id: string;
+  value: string;
+  label: string;
+  title: string;
+  description: string;
+}
+
+export interface VenueDetails {
+  capacity: number;
+  location: string;
+  priceRange: string;
+  byob: boolean;
+}
+
+export const eventTypes: EventType[] = [
   {
     id: 'celebrations',
     value: 'birthday',
@@ -29,7 +44,7 @@ export const eventTypes = [
   },
 ];
 
-export const venueDetails = {
+export const venueDetails: VenueDetails = {
   capacity: 70,
   location: 'Hell\'s Kitchen, NYC',
   priceRange: '$200-400/hour',
