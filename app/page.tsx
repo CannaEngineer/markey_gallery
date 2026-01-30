@@ -7,6 +7,9 @@ import { Details } from '@/components/sections/Details';
 import { Contact } from '@/components/sections/Contact';
 import { getGalleryImages } from '@/lib/getGalleryImages';
 
+// Force dynamic rendering to shuffle images on each visit
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   const galleryImages = getGalleryImages();
 

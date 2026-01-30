@@ -7,8 +7,20 @@ export interface GalleryImage {
 }
 
 /**
+ * Shuffles an array using Fisher-Yates algorithm
+ */
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+/**
  * Automatically reads all images from public/images directory
- * Returns array sorted alphabetically
+ * Returns array shuffled randomly (different order on each page visit)
  * Just add/remove images from public/images folder - no code changes needed
  */
 export function getGalleryImages(): GalleryImage[] {
@@ -22,14 +34,17 @@ export function getGalleryImages(): GalleryImage[] {
       /\.(jpg|jpeg|png|webp|gif)$/i.test(file)
     );
 
-    // Sort alphabetically
+    // Sort alphabetically first (for consistency)
     imageFiles.sort();
 
     // Map to GalleryImage objects with simple alt text
-    return imageFiles.map(filename => ({
+    const images = imageFiles.map(filename => ({
       src: `/images/${filename}`,
       alt: 'Markey Gallery',
     }));
+
+    // Shuffle randomly for each page visit
+    return shuffleArray(images);
   } catch (error) {
     console.error('Error reading gallery images:', error);
     return [];
