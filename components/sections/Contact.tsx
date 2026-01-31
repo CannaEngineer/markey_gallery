@@ -38,6 +38,15 @@ export function Contact() {
         throw new Error('Failed to send message');
       }
 
+      // Track conversion in Google Analytics
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'form_submission', {
+          event_category: 'Contact',
+          event_label: data.eventType,
+          value: 1,
+        });
+      }
+
       setIsSuccess(true);
     } catch (err) {
       setError('Failed to send message. Please try again or email us directly.');
