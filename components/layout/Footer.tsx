@@ -1,3 +1,5 @@
+import { venueDetails } from '@/lib/constants';
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -59,24 +61,41 @@ export function Footer() {
           {/* Contact Info */}
           <div>
             <h4 className="text-sm uppercase tracking-widest text-text-secondary mb-3">
-              Get in Touch
+              Visit Us
             </h4>
-            <p className="text-sm text-text-secondary">
-              Hell's Kitchen, NYC
+            <address className="text-sm text-text-secondary not-italic leading-relaxed">
+              {venueDetails.address}
+            </address>
+            <p className="text-sm text-text-secondary mt-4">
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venueDetails.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gold transition-colors duration-300"
+              >
+                Get Directions →
+              </a>
             </p>
             <p className="text-sm text-text-secondary mt-4">
               <a
                 href="#contact"
                 className="hover:text-gold transition-colors duration-300"
               >
-                Send us an inquiry →
+                Send Inquiry →
               </a>
             </p>
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Neighborhoods Served - SEO */}
         <div className="mt-12 pt-8 border-t border-border-subtle text-center">
+          <p className="text-xs text-text-muted mb-2">
+            Serving {venueDetails.location} and surrounding neighborhoods including Midtown West, Times Square, Hudson Yards, and Clinton
+          </p>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-4 text-center">
           <p className="text-sm text-text-muted">
             &copy; {currentYear} Markey Gallery. All rights reserved.
           </p>
