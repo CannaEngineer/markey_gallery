@@ -1,6 +1,8 @@
-import { venueDetails } from '@/lib/constants';
+import { venueDetails, eventTypes } from '@/lib/constants';
 
 export function StructuredData() {
+  const baseUrl = 'https://markeygallery.com';
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -48,12 +50,35 @@ export function StructuredData() {
           // 'https://www.instagram.com/markeygallery',
           // 'https://www.facebook.com/markeygallery',
         ],
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: '5.0',
-          reviewCount: '12', // TODO: Update with real review count
-          bestRating: '5',
-          worstRating: '1',
+        // NOTE: aggregateRating removed until real reviews exist (violates Google guidelines if fake)
+        // Add back when you have 3+ verified Google reviews
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: 'Event Venue Services',
+          itemListElement: eventTypes.map((eventType) => ({
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: `${eventType.title} Event Venue`,
+              description: eventType.description,
+              provider: {
+                '@id': `${baseUrl}/#organization`,
+              },
+              areaServed: {
+                '@type': 'City',
+                name: 'New York',
+              },
+            },
+            priceSpecification: {
+              '@type': 'PriceSpecification',
+              price: '200',
+              priceCurrency: 'USD',
+              unitText: 'HOUR',
+              description: 'Starting price per hour',
+            },
+            availability: 'https://schema.org/InStock',
+            validFrom: new Date().toISOString().split('T')[0],
+          })),
         },
         amenityFeature: [
           {
@@ -202,33 +227,93 @@ export function StructuredData() {
       // BreadcrumbList Schema (helps with site structure in search results)
       {
         '@type': 'BreadcrumbList',
-        '@id': 'https://markeygallery.com/#breadcrumb',
+        '@id': `${baseUrl}/#breadcrumb`,
         itemListElement: [
           {
             '@type': 'ListItem',
             position: 1,
             name: 'Home',
-            item: 'https://markeygallery.com',
+            item: baseUrl,
           },
           {
             '@type': 'ListItem',
             position: 2,
             name: 'Event Space',
-            item: 'https://markeygallery.com#space',
+            item: `${baseUrl}#space`,
           },
           {
             '@type': 'ListItem',
             position: 3,
             name: 'Event Types',
-            item: 'https://markeygallery.com#events',
+            item: `${baseUrl}#events`,
           },
           {
             '@type': 'ListItem',
             position: 4,
             name: 'Contact',
-            item: 'https://markeygallery.com#contact',
+            item: `${baseUrl}#contact`,
           },
         ],
+      },
+      // Service Schema (primary venue rental service)
+      {
+        '@type': 'Service',
+        '@id': `${baseUrl}/#service`,
+        serviceType: 'Event Venue Rental',
+        name: 'Event Venue Rental - Hell\'s Kitchen NYC',
+        description: 'Premium event space rental for corporate events, celebrations, and private gatherings in Hell\'s Kitchen, Manhattan.',
+        provider: {
+          '@id': `${baseUrl}/#organization`,
+        },
+        areaServed: [
+          {
+            '@type': 'City',
+            name: 'New York',
+          },
+          {
+            '@type': 'Place',
+            name: 'Manhattan',
+          },
+        ],
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'USD',
+          price: '200',
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: '200',
+            priceCurrency: 'USD',
+            unitText: 'per hour',
+          },
+          availability: 'https://schema.org/InStock',
+          validFrom: new Date().toISOString().split('T')[0],
+          url: `${baseUrl}#contact`,
+        },
+        category: 'Event Venue',
+        termsOfService: `${baseUrl}#contact`,
+      },
+      // ItemList Schema (for event types catalog)
+      {
+        '@type': 'ItemList',
+        '@id': `${baseUrl}/#event-types`,
+        name: 'Event Types Hosted at Markey Gallery',
+        description: 'Types of events perfect for Markey Gallery event space',
+        numberOfItems: eventTypes.length,
+        itemListElement: eventTypes.map((eventType, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          item: {
+            '@type': 'Product',
+            name: `${eventType.title} Event Package`,
+            description: eventType.description,
+            offers: {
+              '@type': 'Offer',
+              price: '200',
+              priceCurrency: 'USD',
+              availability: 'https://schema.org/InStock',
+            },
+          },
+        })),
       },
     ],
   };
