@@ -1,62 +1,25 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import { motion } from 'framer-motion';
 import { fadeUp, staggerContainer, staggerItem } from '@/lib/animations';
 import { eventTypes } from '@/lib/constants';
 
 export function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [state, handleSubmit] = useForm(
+    process.env.NEXT_PUBLIC_FORMSPREE_ID || ''
+  );
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError('');
+  // Track conversion in Google Analytics on successful submission
+  if (state.succeeded && typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', 'form_submission', {
+      event_category: 'Contact',
+      event_label: 'inquiry',
+      value: 1,
+    });
+  }
 
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      eventType: formData.get('eventType'),
-      date: formData.get('date'),
-      guests: formData.get('guests'),
-      message: formData.get('message'),
-    };
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      // Track conversion in Google Analytics
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'form_submission', {
-          event_category: 'Contact',
-          event_label: data.eventType,
-          value: 1,
-        });
-      }
-
-      setIsSuccess(true);
-    } catch (err) {
-      setError('Failed to send message. Please try again or email us directly.');
-      console.error('Form submission error:', err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  if (isSuccess) {
+  if (state.succeeded) {
     return (
       <section id="contact" className="py-32 bg-stone-950">
         <div className="max-w-3xl mx-auto px-6 text-center">
@@ -73,10 +36,7 @@ export function Contact() {
               We've received your inquiry and will respond within 24 hours.
             </p>
             <button
-              onClick={() => {
-                setIsSuccess(false);
-                setError('');
-              }}
+              onClick={() => window.location.reload()}
               className="inline-flex items-center justify-center px-8 py-4 text-sm font-sans tracking-widest uppercase border border-cream/30 text-cream hover:bg-cream/10 hover:border-cream/50 transition-all duration-300"
             >
               Send Another Inquiry
@@ -128,9 +88,11 @@ export function Contact() {
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
-            {error && (
+            {state.errors && state.errors.length > 0 && (
               <div className="p-4 bg-red-900/20 border border-red-900/50 rounded">
-                <p className="text-red-400 text-sm">{error}</p>
+                <p className="text-red-400 text-sm">
+                  Failed to send message. Please try again or email us directly.
+                </p>
               </div>
             )}
 
@@ -148,7 +110,7 @@ export function Contact() {
                 name="name"
                 required
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={isSubmitting}
+                disabled={state.submitting}
               />
             </div>
 
@@ -166,7 +128,13 @@ export function Contact() {
                 name="email"
                 required
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={isSubmitting}
+                disabled={state.submitting}
+              />
+              <ValidationError
+                prefix="Email"
+                field="email"
+                errors={state.errors}
+                className="mt-2 text-red-400 text-sm"
               />
             </div>
 
@@ -183,7 +151,7 @@ export function Contact() {
                 name="eventType"
                 required
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={isSubmitting}
+                disabled={state.submitting}
               >
                 <option value="">Select an event type</option>
                 {eventTypes.map((event) => (
@@ -208,7 +176,7 @@ export function Contact() {
                 type="date"
                 name="date"
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={isSubmitting}
+                disabled={state.submitting}
               />
             </div>
 
@@ -228,7 +196,7 @@ export function Contact() {
                 max="70"
                 placeholder="1-70"
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors"
-                disabled={isSubmitting}
+                disabled={state.submitting}
               />
             </div>
 
@@ -245,17 +213,17 @@ export function Contact() {
                 name="message"
                 rows={6}
                 className="w-full px-4 py-3 bg-stone-900 border border-stone-800 text-cream focus:outline-none focus:border-amber-600 transition-colors resize-none"
-                disabled={isSubmitting}
+                disabled={state.submitting}
               />
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={state.submitting}
               className="w-full px-8 py-4 text-sm font-sans tracking-widest uppercase bg-amber-600 text-stone-950 hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-600/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Sending...' : 'Send Inquiry'}
+              {state.submitting ? 'Sending...' : 'Send Inquiry'}
             </button>
           </form>
         </motion.div>
