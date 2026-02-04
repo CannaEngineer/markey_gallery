@@ -4,16 +4,19 @@ export function StructuredData() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@graph': [
-      // LocalBusiness Schema
+      // LocalBusiness Schema (EventVenue + LocalBusiness for maximum visibility)
       {
-        '@type': 'EventVenue',
+        '@type': ['EventVenue', 'LocalBusiness', 'Place'],
         '@id': 'https://markeygallery.com/#venue',
         name: 'Markey Gallery',
-        description: 'Exclusive event venue in Hell\'s Kitchen for corporate events, milestone celebrations, and private gatherings.',
+        alternateName: 'Markey Gallery NYC',
+        description: 'Exclusive event venue in Hell\'s Kitchen for corporate events, milestone celebrations, and private gatherings. BYOB allowed. 70-guest capacity. Premium space near Times Square.',
         url: 'https://markeygallery.com',
         telephone: '+1-XXX-XXX-XXXX', // TODO: Add real phone number
         email: 'info@markeygallery.com', // TODO: Add real email
-        priceRange: '$$$$',
+        priceRange: '$$-$$$',
+        currenciesAccepted: 'USD',
+        paymentAccepted: 'Cash, Credit Card, Debit Card',
         image: [
           'https://markeygallery.com/images/space-main.jpg',
           'https://markeygallery.com/images/space-event.jpg',
@@ -55,10 +58,49 @@ export function StructuredData() {
         amenityFeature: [
           {
             '@type': 'LocationFeatureSpecification',
-            name: 'Standing Capacity',
+            name: 'Maximum Occupancy',
             value: venueDetails.capacity,
           },
+          {
+            '@type': 'LocationFeatureSpecification',
+            name: 'BYOB Allowed',
+            value: 'Yes',
+          },
+          {
+            '@type': 'LocationFeatureSpecification',
+            name: 'Floor',
+            value: '2nd Floor',
+          },
+          {
+            '@type': 'LocationFeatureSpecification',
+            name: 'WiFi',
+            value: 'Yes',
+          },
+          {
+            '@type': 'LocationFeatureSpecification',
+            name: 'Sound System',
+            value: 'Yes',
+          },
         ],
+        areaServed: [
+          {
+            '@type': 'City',
+            name: 'New York',
+          },
+          {
+            '@type': 'Place',
+            name: 'Manhattan',
+          },
+          {
+            '@type': 'Place',
+            name: 'Hell\'s Kitchen',
+          },
+          {
+            '@type': 'Place',
+            name: 'Midtown West',
+          },
+        ],
+        keywords: 'event venue, Hell\'s Kitchen, NYC, corporate events, birthday party, BYOB venue, private event space, Manhattan event venue, Midtown West, Times Square area',
       },
       // Organization Schema
       {
@@ -130,6 +172,61 @@ export function StructuredData() {
               '@type': 'Answer',
               text: 'Markey Gallery is ideal for corporate events, milestone birthdays, engagement parties, art exhibitions, creative workshops, and intimate private celebrations.',
             },
+          },
+          {
+            '@type': 'Question',
+            name: 'Is BYOB allowed at Markey Gallery?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes! BYOB (Bring Your Own Beverage) is allowed at Markey Gallery for private events, making it a cost-effective option for your celebration in Hell\'s Kitchen.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How do I book Markey Gallery?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Fill out our contact form with your event details, and we\'ll respond within 24 hours with availability and pricing. We\'re located in Hell\'s Kitchen, Manhattan.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Is Markey Gallery near public transportation?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes! Markey Gallery is easily accessible via subway (A, C, E trains at 42nd St-Port Authority) and is within walking distance of Penn Station and Times Square in Hell\'s Kitchen.',
+            },
+          },
+        ],
+      },
+      // BreadcrumbList Schema (helps with site structure in search results)
+      {
+        '@type': 'BreadcrumbList',
+        '@id': 'https://markeygallery.com/#breadcrumb',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://markeygallery.com',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Event Space',
+            item: 'https://markeygallery.com#space',
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: 'Event Types',
+            item: 'https://markeygallery.com#events',
+          },
+          {
+            '@type': 'ListItem',
+            position: 4,
+            name: 'Contact',
+            item: 'https://markeygallery.com#contact',
           },
         ],
       },

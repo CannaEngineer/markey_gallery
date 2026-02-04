@@ -37,11 +37,26 @@ export function getGalleryImages(): GalleryImage[] {
     // Sort alphabetically first (for consistency)
     imageFiles.sort();
 
-    // Map to GalleryImage objects with simple alt text
-    const images = imageFiles.map(filename => ({
-      src: `/images/${filename}`,
-      alt: 'Markey Gallery',
-    }));
+    // Map to GalleryImage objects with SEO-optimized alt text
+    const images = imageFiles.map((filename, index) => {
+      // Extract descriptive name from filename or use generic description
+      const baseName = filename.replace(/\.(jpg|jpeg|png|webp|gif)$/i, '');
+      const readableName = baseName
+        .replace(/-/g, ' ')
+        .replace(/markey/gi, 'Markey Gallery')
+        .replace(/^\d+/, '') // Remove leading numbers
+        .trim();
+
+      // Create SEO-rich alt text with location keywords
+      const altText = readableName
+        ? `${readableName} - Hell's Kitchen NYC event venue`
+        : `Markey Gallery event space interior view ${index + 1} - Hell's Kitchen NYC venue`;
+
+      return {
+        src: `/images/${filename}`,
+        alt: altText,
+      };
+    });
 
     // Shuffle randomly for each page visit
     return shuffleArray(images);

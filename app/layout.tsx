@@ -8,16 +8,42 @@ export const metadata: Metadata = {
   title: "Premium Event Space Hell's Kitchen NYC | Markey Gallery - From $200/hr",
   description: "Exclusive event venue in Hell's Kitchen for corporate events, milestone celebrations & private gatherings. 70-guest capacity. Premium space near Times Square. Book your 2026 event today.",
   keywords: [
+    // Primary location keywords
     "event space Hell's Kitchen",
-    "private event venue Midtown West",
-    "corporate event space NYC",
-    "birthday party venue Manhattan",
+    "event venue Hell's Kitchen NYC",
+    "Hell's Kitchen event space",
+
+    // Neighborhood variants
+    "event venue Midtown West",
+    "private event space near Times Square",
+    "Manhattan event venue",
+    "event space 10018",
+    "NYC event venue",
+
+    // Event type + location
+    "corporate event space Hell's Kitchen",
+    "birthday party venue Hell's Kitchen",
+    "private party venue Midtown Manhattan",
+    "corporate venue near Times Square",
+    "celebration venue NYC",
+
+    // Capacity-specific
+    "small event venue NYC",
+    "intimate event space Manhattan",
+    "70 person venue NYC",
     "intimate celebration space",
-    "event venue near Times Square",
+
+    // Feature-specific
+    "BYOB event venue NYC",
+    "BYOB party space Manhattan",
+    "affordable event space NYC",
     "premium event space NYC",
-    "Hell's Kitchen event venue",
-    "private party space Manhattan",
-    "corporate venue Midtown"
+
+    // Long-tail local
+    "event space walking distance Times Square",
+    "private event venue Penn Station area",
+    "corporate event space Midtown",
+    "birthday venue Manhattan"
   ],
   authors: [{ name: "Markey Gallery" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://markeygallery.com"),
