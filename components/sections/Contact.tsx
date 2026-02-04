@@ -88,7 +88,7 @@ export function Contact() {
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
-            {state.errors && state.errors.length > 0 && (
+            {state.errors && Object.keys(state.errors).length > 0 && (
               <div className="p-4 bg-red-900/20 border border-red-900/50 rounded">
                 <p className="text-red-400 text-sm">
                   Failed to send message. Please try again or email us directly.
