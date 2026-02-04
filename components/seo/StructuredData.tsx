@@ -292,29 +292,8 @@ export function StructuredData() {
         category: 'Event Venue',
         termsOfService: `${baseUrl}#contact`,
       },
-      // ItemList Schema (for event types catalog)
-      {
-        '@type': 'ItemList',
-        '@id': `${baseUrl}/#event-types`,
-        name: 'Event Types Hosted at Markey Gallery',
-        description: 'Types of events perfect for Markey Gallery event space',
-        numberOfItems: eventTypes.length,
-        itemListElement: eventTypes.map((eventType, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          item: {
-            '@type': 'Product',
-            name: `${eventType.title} Event Package`,
-            description: eventType.description,
-            offers: {
-              '@type': 'Offer',
-              price: '200',
-              priceCurrency: 'USD',
-              availability: 'https://schema.org/InStock',
-            },
-          },
-        })),
-      },
+      // NOTE: ItemList with Product removed - triggered merchant listing validation
+      // Event types are already covered in hasOfferCatalog within EventVenue schema
     ],
   };
 
